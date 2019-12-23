@@ -1,8 +1,8 @@
 package impl
 
 const (
-	TextType = iota + 1
-	LinkType
+	TextType = "text"
+	LinkType = "link"
 )
 
 type MsgType struct {

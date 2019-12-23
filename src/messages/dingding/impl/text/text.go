@@ -1,7 +1,7 @@
 package text
 
 import (
-	"github.com/ray1888/self-defined-dingbot"
+	"github.com/ray1888/self-defined-dingbot/src/messages/dingding/impl"
 )
 
 type Text struct {
@@ -14,12 +14,13 @@ type At struct {
 }
 
 type TextMsg struct {
-	MsgType
+	impl.MsgType
 	Text `json:"text"`
 	At   `json:"at"`
 }
 
 func Init() interface{} {
 	msg := new(TextMsg)
+	msg.MsgType.MsgType = impl.TextType
 	return msg
 }
