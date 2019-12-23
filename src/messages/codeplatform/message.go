@@ -1,7 +1,9 @@
 package codeplatform
 
-const (
-	MergeRequest = "merge_Request"
-	Push         = "push"
-	Tag          = "tag"
-)
+var MergeRequest = "merge_Request"
+var Push = "push"
+var Tag = "tag"
+
+type GitlabBody interface {
+	GetReqType() string
+}
