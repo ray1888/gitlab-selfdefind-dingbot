@@ -17,17 +17,30 @@ type Body struct {
 	// CommitNumber 只显示最新的一个commit号码
 	CommitNumber string
 	// 详细的commit数量
-	Commits   []Commit
-	Status    string
-	Assignee  string
-	CreateAt  time.Time
-	UpdatedAt time.Time
+	Commits     []Commit
+	State       string
+	MergeStatus string
+	AssigneeId  int
+	CreateAt    time.Time
+	UpdatedAt   time.Time
 }
 
 func (b Body) Equal(body Body) bool {
 	if (b.EventType == body.EventType) &&
 		(b.CommitNumber == body.CommitNumber) &&
 		(b.Source == body.Source) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func (b Body) MergeEqual(body Body) bool {
+	if (b.EventType == body.EventType) &&
+		(b.CommitNumber == body.CommitNumber) &&
+		(b.Source == body.Source) &&
+		(b.CreateAt == body.CreateAt) &&
+		(b.UpdatedAt == b.UpdatedAt) {
 		return true
 	} else {
 		return false

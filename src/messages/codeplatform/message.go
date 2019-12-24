@@ -1,6 +1,6 @@
 package codeplatform
 
-var MergeRequest = "merge_Request"
+var MergeRequest = "merge_request"
 var Push = "push"
 var Tag = "tag"
 

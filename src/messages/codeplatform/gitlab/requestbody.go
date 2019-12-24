@@ -3,9 +3,10 @@ package gitlab
 import "time"
 
 type User struct {
-	Name       string `json:"name"`
-	UserName   string `json:"user_name"`
-	Avatar_url string `json:"avatar_url"`
+	Name               string `json:"name"`
+	UserNameUnderScore string `json:"user_name"`
+	Username           string `json:"username"`
+	Avatar_url         string `json:"avatar_url"`
 }
 
 type Project struct {
@@ -49,8 +50,8 @@ type ObjectAttributes struct {
 	Id           int         `json:"id"`
 	TargetBranch string      `json:"target_branch"`
 	SourceBranch string      `json:"source_branch"`
-	AuthorId     string      `json:"author_id"`
-	AssingeeId   string      `json:"assignee_id"`
+	AuthorId     int         `json:"author_id"`
+	AssingeeId   int         `json:"assignee_id"`
 	Title        string      `json:"title"`
 	CreatedAt    time.Time   `json:"created_at"`
 	Updatedat    time.Time   `json:"updated_at"`
@@ -85,6 +86,7 @@ type TagBody PushBody
 
 type MergeRequestBody struct {
 	BaseBody
+	User             `json:"user"`
 	ObjectAttributes `json:"object_attributes"`
 }
 

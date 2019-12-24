@@ -63,7 +63,25 @@ func TestGitlabDecoderPushEvent(t *testing.T) {
 //	decoder := new(impl.GitlabDecoder)
 //
 //	tests := []Test{
-//		{TestName: "Decode Tag Event Success", TestFile: "./fixture/tag.json", Output: ""},
+//		{TestName: "Decode Tag Event Success", TestFile: "./fixture/tag.json",
+//			Output: middlemsg.Body{
+//				EventType:    "merge_request",
+//				Username:     "root",
+//				Source:       "ms-viewport",
+//				Target:       "master",
+//				Project:      "Gitlab Test",
+//				CommitNumber: "da1560886d4f094c3e6c9ef40349f7d38b5d27d7",
+//				Commits: []middlemsg.Commit{
+//					{Number: "b6568db1bc1dcd7f8b4d5a946b0b91f9dacd7327",
+//						Info: "Update Catalan translation to e38cb41."},
+//					{Number: "da1560886d4f094c3e6c9ef40349f7d38b5d27d7",
+//						Info: "fixed readme"},
+//				},
+//				TotalCommitCount: 2,
+//				CreateAt:         time.Date(2011, 12, 12, 14, 27, 31, 0, time.UTC),
+//				UpdatedAt:        time.Date(2013, 12, 03, 17, 15, 43, 0, time.UTC),
+//			},
+//		},
 //	}
 //	for _, test := range tests {
 //		file, err := os.Open(test.TestFile)
@@ -76,7 +94,7 @@ func TestGitlabDecoderPushEvent(t *testing.T) {
 //		if err := json.NewDecoder(bytes.NewReader(data)).Decode(&PushMsg); err != nil {
 //			t.Fatalf("Test %s Failed, can't parse json file to json struct", test.TestName)
 //		}
-//		if decoder.Msg != test.Output {
+//		if test.Output.Equal(decoder.Msg) != true  {
 //			t.Fatalf("Test %s, Parse Data error.", test.TestName)
 //		}
 //	}
@@ -84,10 +102,8 @@ func TestGitlabDecoderPushEvent(t *testing.T) {
 //}
 
 func TestGitlabDecoderMergeRequestEvent(t *testing.T) {
-	decoder := new(impl.GitlabDecoder)
-
 	tests := []Test{
-		{TestName: "Decode MergeRequest Event Success", TestFile: "./fixture/push.json",
+		{TestName: "Decode MergeRequest Event Success", TestFile: "./fixture/mergerequest.json",
 			Output: middlemsg.Body{
 				EventType:    "merge_request",
 				Username:     "root",
@@ -102,8 +118,10 @@ func TestGitlabDecoderMergeRequestEvent(t *testing.T) {
 						Info: "fixed readme"},
 				},
 				TotalCommitCount: 2,
-				CreateAt:         time.Date(2011, 12, 12, 14, 27, 31, 0, time.UTC),
-				UpdatedAt:        time.Date(2013, 12, 03, 17, 15, 43, 0, time.UTC),
+				State:            "opened",
+				MergeStatus:      "unchecked",
+				CreateAt:         time.Date(2013, 12, 03, 17, 23, 34, 0, time.UTC),
+				UpdatedAt:        time.Date(2013, 12, 03, 17, 23, 34, 0, time.UTC),
 			},
 		},
 	}
@@ -118,9 +136,10 @@ func TestGitlabDecoderMergeRequestEvent(t *testing.T) {
 		if err := json.NewDecoder(bytes.NewReader(data)).Decode(&MergeReqMsg); err != nil {
 			t.Fatalf("Test %s Failed, can't parse json file to json struct", test.TestName)
 		}
-
-		if test.Output.Equal(decoder.Msg) {
-			t.Fatalf("Test %s, Parse Data error.", test.TestName)
+		result := impl.MRParse(*MergeReqMsg)
+		if test.Output.MergeEqual(result) != true {
+			t.Fatalf("Test %s, Parse Data error. Expected is %+v\n Actual is %+v\n",
+				test.TestName, test.Output, result)
 		}
 	}
 }

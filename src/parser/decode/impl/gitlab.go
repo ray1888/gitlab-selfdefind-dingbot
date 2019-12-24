@@ -10,16 +10,16 @@ import (
 )
 
 type GitlabDecoder struct {
-	Msg     middlemsg.Body
-	JsonMsg string
+	JsonMsg      string
+	InnerChannel chan (middlemsg.Body)
 }
 
 func (gd *GitlabDecoder) Decode(b codeplatform.GitlabBody) {
 	switch b.(type) {
-	//case gitlab.MergeRequestBody:
-	//	gd.Msg = MRParse(b)
-	//case gitlab.PushBody:
-	//	gd.Msg = PushParse(gitlab.PushBody(b))
+	case gitlab.MergeRequestBody:
+		gd.InnerChannel <- MRParse(b)
+	case gitlab.PushBody:
+		gd.InnerChannel <- PushParse(b)
 	default:
 		log.Fatal("")
 	}
@@ -30,7 +30,7 @@ func PushParse(body gitlab.PushBody) middlemsg.Body {
 	msg.EventType = codeplatform.Push
 	msg.TotalCommitCount = body.TotalCommitCount
 	msg.Project = body.Project.Name
-	msg.Username = body.UserName
+	msg.Username = body.User.Username
 	sourceBranch := strings.Split(body.Ref, "/")
 	msg.Source = sourceBranch[len(sourceBranch)-1]
 	length := len(body.Commits)
@@ -41,6 +41,35 @@ func PushParse(body gitlab.PushBody) middlemsg.Body {
 	return msg
 }
 
-//func MRParse(body ) middlemsg.Body {
-//	return  middlemsg.Body{}
+func MRParse(body gitlab.MergeRequestBody) middlemsg.Body {
+	msg := middlemsg.Body{}
+	msg.EventType = codeplatform.MergeRequest
+	msg.Project = body.Project.Name
+	//msg. = body.User.Name
+	msg.Username = body.User.Username
+	msg.Source = body.ObjectAttributes.SourceBranch
+	msg.Target = body.ObjectAttributes.TargetBranch
+	msg.CommitNumber = body.ObjectAttributes.LastCommit.Id
+	msg.CreateAt = body.ObjectAttributes.CreatedAt
+	msg.UpdatedAt = body.ObjectAttributes.Updatedat
+	msg.State = body.State
+	msg.MergeStatus = body.MergeStatus
+	msg.AssigneeId = body.AssingeeId
+	return msg
+}
+
+//func TagParse(body gitlab.MergeRequestBody) middlemsg.Body {
+//	msg := middlemsg.Body{}
+//	msg.EventType = codeplatform.MergeRequest
+//	msg.Project = body.Project.Name
+//	msg.Username = body.User.Username
+//	msg.Source = body.ObjectAttributes.SourceBranch
+//	msg.Target = body.ObjectAttributes.TargetBranch
+//	msg.CommitNumber = body.ObjectAttributes.LastCommit.Id
+//	msg.CreateAt = body.ObjectAttributes.CreatedAt
+//	msg.UpdatedAt = body.ObjectAttributes.Updatedat
+//	msg.State = body.State
+//	msg.MergeStatus = body.MergeStatus
+//	msg.AssigneeId = body.AssingeeId
+//	return msg
 //}
