@@ -67,6 +67,7 @@ type BaseBody struct {
 	User       `json:"user"`
 	Project    `json:"project"`
 	Repository `json:"repository"`
+	Ref        string `json:"ref"`
 }
 
 // Gitlab Push Type Event data is same to its Tag type event
