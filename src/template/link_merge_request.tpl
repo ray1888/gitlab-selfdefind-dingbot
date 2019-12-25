@@ -1,0 +1,1 @@
+{{ .Username }} {{ .Action }} the merge request from branch {{ .SourceBranch }} to {{ .TargetBranch }} \nlast_commit_msg: {{ .CommitMsgs }} \nStatus: {{ .Status }} \n代码库: {{ .Project }}  \n代码审阅人： @{{ .Assignee }}

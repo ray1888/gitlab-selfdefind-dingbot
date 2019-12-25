@@ -7,6 +7,7 @@ import (
 
 	"github.com/ray1888/self-defined-dingbot/src/messages/codeplatform"
 	"github.com/ray1888/self-defined-dingbot/src/messages/middlemsg"
+	selfDefindTemplate "github.com/ray1888/self-defined-dingbot/src/template"
 )
 
 type Encoder struct {
@@ -36,26 +37,30 @@ func (e *Encoder) encode() {
 }
 
 func loadTemplate(templateName string) (*template.Template, error) {
-	var templateFilePath string
 	switch templateName {
 	case "text":
-		templateFilePath = ""
+		return selfDefindTemplate.TextTemplate, nil
 	case "link":
-		templateFilePath = ""
+		return selfDefindTemplate.LinkMergeRequestTemplate, nil
 	case "actioncard":
-		templateFilePath = ""
+		return selfDefindTemplate.LinkMergeRequestTemplate, nil
 	default:
 		return nil, errors.New("not support name")
 	}
-	tpl, err := template.ParseFiles(templateFilePath)
-	if err != nil {
-		return nil, err
-	}
-	return tpl, nil
 }
 
-func EncodeLinkMsg(body middlemsg.Body) string {
-	return ""
+func EncodeLinkMsg(body middlemsg.Body) (string, error) {
+	tpl, err := loadTemplate("link")
+	if err != nil {
+		return "", err
+	}
+	var content bytes.Buffer
+	err = tpl.Execute(&content, body)
+	contentString := content.String()
+	if err != nil {
+		return "", err
+	}
+	return contentString, nil
 }
 
 func EncodeTextMsg(body middlemsg.Body) (string, error) {
@@ -72,6 +77,16 @@ func EncodeTextMsg(body middlemsg.Body) (string, error) {
 	return contentString, nil
 }
 
-func EncodeActionCardMsg(body middlemsg.Body) {
-
+func EncodeActionCardMsg(body middlemsg.Body) (string, error) {
+	tpl, err := loadTemplate("text")
+	if err != nil {
+		return "", err
+	}
+	var content bytes.Buffer
+	err = tpl.Execute(&content, body)
+	contentString := content.String()
+	if err != nil {
+		return "", err
+	}
+	return contentString, nil
 }

@@ -1,0 +1,1 @@
+{{ .Username }} pushed to branch {{ .Source }} at repository {{ .Project }} \ncommit: {{ .CommitNumber}} \ncommit-message: {{ .Commits }} \n项目：{{ .Project }}
