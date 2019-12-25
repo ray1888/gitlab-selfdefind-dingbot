@@ -36,7 +36,7 @@ func PushParse(body gitlab.PushBody) middlemsg.Body {
 	length := len(body.Commits)
 	msg.CommitNumber = body.Commits[length-1].Id
 	msg.UpdatedAt = body.Commits[length-1].TimeStamp
-	msg.CreateAt = body.Commits[0].TimeStamp
+	msg.CreatedAt = body.Commits[0].TimeStamp
 
 	return msg
 }
@@ -50,7 +50,7 @@ func MRParse(body gitlab.MergeRequestBody) middlemsg.Body {
 	msg.Source = body.ObjectAttributes.SourceBranch
 	msg.Target = body.ObjectAttributes.TargetBranch
 	msg.CommitNumber = body.ObjectAttributes.LastCommit.Id
-	msg.CreateAt = body.ObjectAttributes.CreatedAt
+	msg.CreatedAt = body.ObjectAttributes.CreatedAt
 	msg.UpdatedAt = body.ObjectAttributes.Updatedat
 	msg.State = body.State
 	msg.MergeStatus = body.MergeStatus
@@ -66,7 +66,7 @@ func MRParse(body gitlab.MergeRequestBody) middlemsg.Body {
 //	msg.Source = body.ObjectAttributes.SourceBranch
 //	msg.Target = body.ObjectAttributes.TargetBranch
 //	msg.CommitNumber = body.ObjectAttributes.LastCommit.Id
-//	msg.CreateAt = body.ObjectAttributes.CreatedAt
+//	msg.CreatedAt = body.ObjectAttributes.CreatedAt
 //	msg.UpdatedAt = body.ObjectAttributes.Updatedat
 //	msg.State = body.State
 //	msg.MergeStatus = body.MergeStatus

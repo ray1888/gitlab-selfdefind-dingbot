@@ -55,6 +55,7 @@ func EncodeLinkMsg(body middlemsg.Body) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	body.CommitNumber = body.CommitNumber[:9]
 	var content bytes.Buffer
 	err = tpl.Execute(&content, body)
 	contentString := content.String()

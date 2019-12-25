@@ -21,8 +21,8 @@ type Body struct {
 	CommitsText string
 	State       string
 	MergeStatus string
-	AssigneeId  int
-	CreateAt    time.Time
+	Assignee    string
+	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
 
@@ -40,7 +40,7 @@ func (b Body) MergeEqual(body Body) bool {
 	if (b.EventType == body.EventType) &&
 		(b.CommitNumber == body.CommitNumber) &&
 		(b.Source == body.Source) &&
-		(b.CreateAt == body.CreateAt) &&
+		(b.CreatedAt == body.CreatedAt) &&
 		(b.UpdatedAt == b.UpdatedAt) {
 		return true
 	} else {
