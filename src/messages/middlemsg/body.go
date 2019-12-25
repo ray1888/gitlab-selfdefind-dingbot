@@ -18,6 +18,7 @@ type Body struct {
 	CommitNumber string
 	// 详细的commit数量
 	Commits     []Commit
+	CommitsText string
 	State       string
 	MergeStatus string
 	AssigneeId  int

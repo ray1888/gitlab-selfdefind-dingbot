@@ -3,6 +3,7 @@ package impl
 import (
 	"bytes"
 	"errors"
+	"strings"
 	"text/template"
 
 	"github.com/ray1888/self-defined-dingbot/src/messages/codeplatform"
@@ -68,6 +69,7 @@ func EncodeTextMsg(body middlemsg.Body) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	body.CommitsText = parseCommitsToText(body.Commits)
 	var content bytes.Buffer
 	err = tpl.Execute(&content, body)
 	contentString := content.String()
@@ -89,4 +91,18 @@ func EncodeActionCardMsg(body middlemsg.Body) (string, error) {
 		return "", err
 	}
 	return contentString, nil
+}
+
+func parseCommit(commit middlemsg.Commit) string {
+	return commit.Number[:9] + ": " + commit.Info + "\n"
+}
+
+func parseCommitsToText(commits []middlemsg.Commit) string {
+	result := ""
+	for _, commit := range commits {
+		workCommit := commit
+		result += parseCommit(workCommit)
+	}
+	result = strings.TrimSpace(result)
+	return result
 }
