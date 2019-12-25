@@ -19,7 +19,7 @@ type Test struct {
 }
 
 func TestGitlabDecoderPushEvent(t *testing.T) {
-	decoder := new(impl.GitlabDecoder)
+	//decoder := new(impl.GitlabDecoder)
 
 	tests := []Test{
 		{TestName: "Decode Push Event Success", TestFile: "./fixture/push.json",
@@ -53,7 +53,7 @@ func TestGitlabDecoderPushEvent(t *testing.T) {
 		result := impl.PushParse(*PushMsg)
 		if test.Output.Equal(result) != true {
 			t.Fatalf("Test %s, Parse Data error. Expected is %+v\n Actual is %+v\n",
-				test.TestName, test.Output, decoder.Msg)
+				test.TestName, test.Output, result)
 		}
 	}
 
@@ -117,6 +117,9 @@ func TestGitlabDecoderMergeRequestEvent(t *testing.T) {
 					{Number: "da1560886d4f094c3e6c9ef40349f7d38b5d27d7",
 						Info: "fixed readme"},
 				},
+				Link:             "http://example.com/diaspora/merge_requests/1",
+				Assignee:         gitlab.User{Name: "User1", Username: "user1"},
+				Title:            "MS-Viewport",
 				TotalCommitCount: 2,
 				State:            "opened",
 				MergeStatus:      "unchecked",

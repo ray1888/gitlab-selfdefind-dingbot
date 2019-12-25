@@ -19,8 +19,9 @@ type TextMsg struct {
 	At   `json:"at"`
 }
 
-func Init() interface{} {
+func Init(content string) *TextMsg {
 	msg := new(TextMsg)
 	msg.MsgType.MsgType = impl.TextType
+	msg.Text.Content = content
 	return msg
 }

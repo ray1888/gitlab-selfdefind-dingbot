@@ -1,6 +1,10 @@
 package middlemsg
 
-import "time"
+import (
+	"time"
+
+	"github.com/ray1888/self-defined-dingbot/src/messages/codeplatform/gitlab"
+)
 
 type Commit struct {
 	Number string
@@ -21,9 +25,13 @@ type Body struct {
 	CommitsText string
 	State       string
 	MergeStatus string
-	Assignee    string
+	Assignee    gitlab.User
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	// 打开的链接
+	Link string
+	// MergeRequest Title
+	Title string
 }
 
 func (b Body) Equal(body Body) bool {
@@ -41,7 +49,10 @@ func (b Body) MergeEqual(body Body) bool {
 		(b.CommitNumber == body.CommitNumber) &&
 		(b.Source == body.Source) &&
 		(b.CreatedAt == body.CreatedAt) &&
-		(b.UpdatedAt == b.UpdatedAt) {
+		(b.UpdatedAt == b.UpdatedAt) &&
+		(b.Assignee.Username == body.Assignee.Username) &&
+		(b.Assignee.Name == body.Assignee.Name) &&
+		(b.Link == body.Link) {
 		return true
 	} else {
 		return false

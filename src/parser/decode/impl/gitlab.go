@@ -1,7 +1,7 @@
 package impl
 
 import (
-	"log"
+	//"log"
 	"strings"
 
 	"github.com/ray1888/self-defined-dingbot/src/messages/codeplatform"
@@ -14,16 +14,16 @@ type GitlabDecoder struct {
 	InnerChannel chan (middlemsg.Body)
 }
 
-func (gd *GitlabDecoder) Decode(b codeplatform.GitlabBody) {
-	switch b.(type) {
-	case gitlab.MergeRequestBody:
-		gd.InnerChannel <- MRParse(b)
-	case gitlab.PushBody:
-		gd.InnerChannel <- PushParse(b)
-	default:
-		log.Fatal("")
-	}
-}
+//func (gd *GitlabDecoder) Decode(b codeplatform.GitlabBody) {
+//	switch b.(type) {
+//	case gitlab.MergeRequestBody:
+//		gd.InnerChannel <- MRParse(b)
+//	case gitlab.PushBody:
+//		gd.InnerChannel <- PushParse(b)
+//	default:
+//		log.Fatal("")
+//	}
+//}
 
 func PushParse(body gitlab.PushBody) middlemsg.Body {
 	msg := middlemsg.Body{}
@@ -54,7 +54,8 @@ func MRParse(body gitlab.MergeRequestBody) middlemsg.Body {
 	msg.UpdatedAt = body.ObjectAttributes.Updatedat
 	msg.State = body.State
 	msg.MergeStatus = body.MergeStatus
-	msg.AssigneeId = body.AssingeeId
+	msg.Assignee = body.ObjectAttributes.Assingee
+	msg.Link = body.ObjectAttributes.Link
 	return msg
 }
 

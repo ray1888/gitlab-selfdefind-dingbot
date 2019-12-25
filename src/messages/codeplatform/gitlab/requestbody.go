@@ -51,7 +51,7 @@ type ObjectAttributes struct {
 	TargetBranch string      `json:"target_branch"`
 	SourceBranch string      `json:"source_branch"`
 	AuthorId     int         `json:"author_id"`
-	AssingeeId   int         `json:"assignee_id"`
+	Assingee     User        `json:"assignee"`
 	Title        string      `json:"title"`
 	CreatedAt    time.Time   `json:"created_at"`
 	Updatedat    time.Time   `json:"updated_at"`
@@ -61,6 +61,7 @@ type ObjectAttributes struct {
 	Source       MergeObject `json:"source"`
 	Target       MergeObject `json:"target"`
 	LastCommit   Commit      `json:"last_commit"`
+	Link         string      `json:"url"`
 }
 
 type BaseBody struct {

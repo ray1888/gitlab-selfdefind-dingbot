@@ -13,6 +13,9 @@ func (r Response) IsSuccess() bool {
 	return true
 }
 
-func (r Response) Failed() {
-
+func (r Response) Failed() (bool, string) {
+	//if r.StatusCode != 200{
+	//	return true,
+	//}
+	return false, ""
 }
