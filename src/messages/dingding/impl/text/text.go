@@ -9,8 +9,8 @@ type Text struct {
 }
 
 type At struct {
-	AtMobiles []string `json:"at_mobiles"`
-	IsAtAll   bool     `json:"is_at_all"`
+	AtMobiles []string `json:"atMobiles"`
+	IsAtAll   bool     `json:"isAtAll"`
 }
 
 type TextMsg struct {
@@ -23,5 +23,8 @@ func Init(content string) *TextMsg {
 	msg := new(TextMsg)
 	msg.MsgType.MsgType = impl.TextType
 	msg.Text.Content = content
+	// TODO just for testing @function
+	//msg.At.AtMobiles = []string{"13332889767"}
+	//msg.At.IsAtAll = true
 	return msg
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/ray1888/self-defined-dingbot/src/messages/dingding/impl/link"
 
 	//"fmt"
 	"github.com/ray1888/self-defined-dingbot/src/messages/dingding/impl/text"
@@ -26,14 +27,19 @@ func Init() *DingClient {
 	return client
 }
 
-//func (c DingClient) SendLinkMsg() response.DingResponse {
-//	req := http.Request{URL: c.Endpoint, Body:*(link.Init())}
-//	req, err := c.Do(&req)
-//	if err != nil{
-//
-//	}
-//	return dingding.Response{}
-//}
+func (c DingClient) SendLinkMsg(msg string) response.DingResponse {
+	dingLinkMsg := link.Init(msg)
+	data, err := json.Marshal(dingLinkMsg)
+	req, err := http.NewRequest("POST", c.Endpoint, bytes.NewReader(data))
+	req.Header.Set("Content-Type", "application/json")
+	res, err := c.Do(req)
+	if err != nil {
+
+	}
+	fmt.Println(res)
+	var Res response.DingResponse
+	return Res
+}
 
 func (c DingClient) SendTextMsg(msg string) response.DingResponse {
 	dingTextMsg := text.Init(msg)
