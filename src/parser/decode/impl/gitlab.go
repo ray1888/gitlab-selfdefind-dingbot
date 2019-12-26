@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"log"
 	//"log"
 	"strings"
 
@@ -10,20 +11,24 @@ import (
 )
 
 type GitlabDecoder struct {
-	JsonMsg      string
-	InnerChannel chan (middlemsg.Body)
+	JsonMsg       string
+	InnerChannel  chan (codeplatform.GitlabBody)
+	DecodeChannel chan (middlemsg.Body)
 }
 
-//func (gd *GitlabDecoder) Decode(b codeplatform.GitlabBody) {
-//	switch b.(type) {
-//	case gitlab.MergeRequestBody:
-//		gd.InnerChannel <- MRParse(b)
-//	case gitlab.PushBody:
-//		gd.InnerChannel <- PushParse(b)
-//	default:
-//		log.Fatal("")
-//	}
-//}
+func (gd *GitlabDecoder) Decode() {
+	for msg := range gd.InnerChannel {
+		switch assertMsg := (msg).(type) {
+		case gitlab.MergeRequestBody:
+			gd.DecodeChannel <- MRParse(assertMsg)
+		case gitlab.PushBody:
+			gd.DecodeChannel <- PushParse(assertMsg)
+		default:
+			log.Fatal("")
+		}
+	}
+
+}
 
 func PushParse(body gitlab.PushBody) middlemsg.Body {
 	msg := middlemsg.Body{}

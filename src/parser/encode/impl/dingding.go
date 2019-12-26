@@ -24,7 +24,7 @@ func Init(inChan chan (middlemsg.Body), outChan chan (string)) *Encoder {
 	return encoder
 }
 
-func (e *Encoder) encode() {
+func (e *Encoder) Encode() {
 	for msg := range e.InnerChannel {
 		var content string
 		var err error
