@@ -3,8 +3,7 @@ package dingding
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"github.com/ray1888/self-defined-dingbot/src/clientsdk/response"
+	"errors"
 	"net/http"
 
 	"github.com/ray1888/self-defined-dingbot/src/messages/dingding/impl/text"
@@ -21,16 +20,19 @@ func Init() *DingClient {
 	return client
 }
 
-func (c DingClient) SendTextMsg(msg string) response.DingResponse {
+func (c DingClient) SendTextMsg(msg string) error {
 	dingTextMsg := text.Init(msg)
 	data, err := json.Marshal(*dingTextMsg)
 	req, err := http.NewRequest("POST", c.Endpoint, bytes.NewReader(data))
 	req.Header.Set("Content-Type", "application/json")
 	res, err := c.Do(req)
 	if err != nil {
-
+		// TODO log error
+		return err
 	}
-	fmt.Println(res)
-	var Res response.DingResponse
-	return Res
+	if res.StatusCode != 200 {
+		// TODO log status code & msg
+		return errors.New("Send Text Msg to DingBot is meetError")
+	}
+	return nil
 }

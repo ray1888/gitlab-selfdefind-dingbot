@@ -34,9 +34,6 @@ func (e *Encoder) encode() {
 		case codeplatform.Push:
 			// Default use Text Msg
 			content, err = EncodeTextMsg(msg)
-		case codeplatform.Tag:
-			// Default use ActionCard Msg
-			content, err = EncodeActionCardMsg(msg)
 		default:
 			content = ""
 			err = errors.New("empty content ")
@@ -67,11 +64,12 @@ func EncodeLinkMsg(body middlemsg.Body) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	//body.CommitNumber = body.CommitNumber[:9]
+	body.CommitNumber = body.CommitNumber[:9]
 	var content bytes.Buffer
 	err = tpl.Execute(&content, body)
 	contentString := content.String()
 	if err != nil {
+		// TODO  add log for it
 		return "", err
 	}
 	return contentString, nil
@@ -83,20 +81,6 @@ func EncodeTextMsg(body middlemsg.Body) (string, error) {
 		return "", err
 	}
 	body.CommitsText = parseCommitsToText(body.Commits)
-	var content bytes.Buffer
-	err = tpl.Execute(&content, body)
-	contentString := content.String()
-	if err != nil {
-		return "", err
-	}
-	return contentString, nil
-}
-
-func EncodeActionCardMsg(body middlemsg.Body) (string, error) {
-	tpl, err := loadTemplate("text")
-	if err != nil {
-		return "", err
-	}
 	var content bytes.Buffer
 	err = tpl.Execute(&content, body)
 	contentString := content.String()
