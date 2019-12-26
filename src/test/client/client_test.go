@@ -34,7 +34,7 @@ func TestClientSendTextMsg(t *testing.T) {
 				"创建时间：2013-12-03T17:15:43Z\n" +
 				"更新时间：2013-12-03T17:15:43Z\n" +
 				"链接: http://example.com/diaspora/merge_requests/1\n" +
-				"代码审阅人：13332889767\n" +
+				"代码审阅人: 13332889767\n" +
 				"Type: merge_request",
 			Output: ""},
 		{Name: "test MergeRequest Message At all",
@@ -49,7 +49,7 @@ func TestClientSendTextMsg(t *testing.T) {
 				"创建时间：2013-12-03T17:15:43Z\n" +
 				"更新时间：2013-12-03T17:15:43Z\n" +
 				"链接: http://example.com/diaspora/merge_requests/1\n" +
-				"代码审阅人：all\n" +
+				"代码审阅人: all\n" +
 				"Type: merge_request",
 			Output: ""},
 	}

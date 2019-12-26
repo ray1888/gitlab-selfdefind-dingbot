@@ -20,17 +20,27 @@ type TextMsg struct {
 	At   `json:"at"`
 }
 
+const (
+	PREFIX = "gitlab"
+	SUFFIX = "\n"
+)
+
 func Init(content string) *TextMsg {
 	msg := new(TextMsg)
 	msg.MsgType.MsgType = impl.TextType
-	msg.Text.Content = content
 	atPersonNames := getAtPersonInContent(content)
 	if atPersonNames == "all" {
 		msg.SetAtAll()
-	} else {
+	} else if atPersonNames != "" {
 		msg.SetAtMobilesByNameList(atPersonNames)
 	}
+	msg.MakeContent(content)
 	return msg
+}
+
+func (t *TextMsg) MakeContent(content string) {
+	// Add Prefix is to pass the dingbot sercurity authentication
+	t.Text.Content = PREFIX + content + SUFFIX
 }
 
 func (t *TextMsg) SetAtAll() {
@@ -47,8 +57,9 @@ func getAtPersonInContent(content string) string {
 		return content
 	}
 	splitContent := strings.Split(content, "\n")
-	// TODO use const instead
-	if splitContent[len(splitContent)-1] != "merge_request" {
+	msgTypeLine := strings.Split(strings.TrimSpace(splitContent[len(splitContent)-1]), ":")
+	msgEventType := strings.TrimSpace(msgTypeLine[len(msgTypeLine)-1])
+	if msgEventType != "merge_request" {
 		return ""
 	}
 	atUsersLine := strings.Split(splitContent[len(splitContent)-2], ":")
